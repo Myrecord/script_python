@@ -115,5 +115,5 @@ class client_main(Cmd):
 	exit(1)
    
 if __name__ == '__main__':
-    runs = client_main('密码','xlsx文件')
+    runs = client_main('password','xlsx_file')
     runs.cmdloop()

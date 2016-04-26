@@ -52,4 +52,5 @@ class Myftp:
 	ftps.quit()
 
 if __name__ == '__main__':
+    myftp = Myftp('username','password','localpath','ftp_server_ip')
     myftp.loadfile()
