@@ -15,7 +15,7 @@ class Myftp:
 
     def Connect(self):
         ftp = ftplib.FTP()
-	ftp.set_pasv(True) //是否开启被动模式
+	ftp.set_pasv(True) #是否开启被动模式
 	try:
 	    ftp.connect(self.host,self.port)
 	except socket.error,e:
