@@ -33,19 +33,18 @@ class Backup_Sql:
     	    return result
     def Tar_file(self):
         Info = self.Sql_file()
-	bashfile = open('/data/start.sh')
-	string = re.findall(r'-db_name=\"(.*?)\"',bashfile.read())[0]
-	names = Info[Info.index((string,))][0]
-        if not os.path.exists(self.backdir):
-            os.mkdir(self.backdir)
-	else:
-	    os.system('/usr/bin/mysqldump --default-character-set=utf8 -u%s -p%s -h%s %s >> %s/%s.sql' % (self.user,self.passwd,self.host,names,self.backdir,names))
-	    Bale = tarfile.open(self.backdir +'/'+ Date + '-' + names +'.tar.gz','w:gz') 
-	for file in os.listdir(self.backdir):
-	    if file.endswith('sql'):
-	        fullpath = os.path.join(self.backdir+'/',file)
-	        Bale.add(fullpath,arcname=file)
-		os.remove(fullpath)
+        for i in Info:
+    	    if i[0] not in ['binlog','mysql','performance_schema','information_schema']: // 过滤数据库
+                if not os.path.exists(self.backdir):
+		    os.mkdir(self.backdir)
+	        else:
+	            os.system('/usr/bin/mysqldump --default-character-set=utf8  %s >> %s/%s.sql' % (i[0],self.backdir,i[0]))
+	        Bale = tarfile.open(self.backdir +'/'+ Date + '_' + i[0] +'.tar.gz','w:gz') 
+	        for file in os.listdir(self.backdir):
+	            if file.endswith('sql'):
+	                fullpath = os.path.join(self.backdir+'/',file)
+	                Bale.add(fullpath,arcname=file)
+		        os.remove(fullpath)
 	Bale.close()
 	for dirpath,dirs,File in os.walk(self.backdir):
 	    for Files in File:
@@ -61,4 +60,3 @@ def Set_Name():
 
 if __name__ == "__main__" :
     Set_Name()
- 
